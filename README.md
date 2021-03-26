@@ -50,7 +50,7 @@ def localized(locale: str):
     # Here we'll access the l10n instance and request the key we want.
     # The translate method takes two arguments, complete path after the 
     # base path and the translation key, since we configured the instance with
-    # 'translations/my_module', to get to tjhe key, we need to use dotted
+    # 'translations/my_module', to get to the key, we need to use dotted
     # notation ending with the key. This assumes that your l10n process already
     # processed your base .po file. If a given locale was not found, defaults
     # to messages.po.
