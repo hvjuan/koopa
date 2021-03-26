@@ -1,2 +1,0 @@
-msgid "mockedTestId"
-msgstr "This is the German mocked translation"
