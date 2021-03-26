@@ -8,10 +8,7 @@ import polib
 from l10n import exceptions as koopa_exceptions
 
 
-# TODO(juan) raise exception if there's not at least one app.desc
-
 _BASE_LOCALE = 'en-US'
-# TODO(juan) messages is a filename, let's customize it.
 _MESSAGES = 'messages'
 
 
@@ -25,9 +22,12 @@ class Translate:
         base_path: project path to base translations document.
     """
 
-    def __init__(self, base_path: str):
+    def __init__(self, base_path: str, file_name: str = _MESSAGES):
+        if not os.path.isdir(base_path):
+            raise koopa_exceptions.DirectoryDoesNotExistException(
+                f'Path {base_path} was not found')
         self.base_path = base_path
-        # TODO(juan) Check that base exists at instance time.
+        self.file_name = file_name
 
     def translate(self, key_path: str, locale='en-US'):
         *key_path, translation_key = key_path.split('.')
@@ -47,10 +47,16 @@ class Translate:
         key_path = '/'.join(key_path)
 
         if locale is not _BASE_LOCALE:
-            full_path = f'{self.base_path}/{key_path}/{_MESSAGES}.{locale}.po'
+            full_path = (
+                f'{self.base_path}/{key_path}/{self.file_name}.{locale}.po')
             # Check if file exists, otherwise fall back to _BASE_LOCALE.
             if os.path.isfile(full_path):
                 return full_path
         # Fall back to base locale if default hasn't changed or it wasn't
-        # found on the file system. Fail silently.
-        return f'{self.base_path}/{key_path}/messages.po'
+        # found on the file system. Fail silently but check again that at least
+        # the base file exists, ie: messages.po
+        default = f'{self.base_path}/{key_path}/messages.po'
+        if not os.path.isfile(default):
+            raise koopa_exceptions.FileDoesNotExistException(
+                f'{default} was not found.')
+        return default

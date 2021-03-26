@@ -10,7 +10,13 @@ _BASE_TRANSLATIONS = 'tests/mocked_translations'
 
 
 class TestTranslate:
-    
+
+    def test_translation(self):
+        translate = translations.Translate(_BASE_TRANSLATIONS)
+        # Not passing a locale should fall back to base english.
+        translated_string = translate.translate('first_level.mockedTestId')
+        assert 'This is the Base English Translation' == translated_string
+
     def test_translation__polish(self):
         translate = translations.Translate(_BASE_TRANSLATIONS)
         translated_string = translate.translate(
@@ -38,7 +44,7 @@ class TestTranslate:
 
     def test_translation__fallback(self):
         translate = translations.Translate(_BASE_TRANSLATIONS)
-        # If an uknown key is given that doesn't exist, is very likely that 
+        # If an uknown key is given that doesn't exist, is very likely that
         # the specific translation may not be ready, so we must always fall
         # back to the base.
         translated_string = translate.translate(
@@ -52,8 +58,17 @@ class TestTranslate:
         assert ('The translation key '
                 'thisKeyDoesNotExist was not found.') == e.value.args[0]
 
-    def test_translation__default(self):
+    def test_translation__raise_directory_does_not_exist(self):
+        wrong_path = 'i/dont/exist'
+        with pytest.raises(
+                koopa_exceptions.DirectoryDoesNotExistException) as e:
+            translations.Translate(wrong_path)
+        assert f'Path {wrong_path} was not found' == e.value.args[0]
+
+    def test_translation__raise_file_does_not_exist(self):
         translate = translations.Translate(_BASE_TRANSLATIONS)
-        # Not passing a locale should fall back to base english.
-        translated_string = translate.translate('first_level.mockedTestId')
-        assert 'This is the Base English Translation' == translated_string
+        with pytest.raises(
+                koopa_exceptions.FileDoesNotExistException) as e:
+            translate.translate('iDontExist.mockedTestId', 'en-GB')
+        assert ('tests/mocked_translations'
+                '/iDontExist/messages.po was not found.') == e.value.args[0]
