@@ -3,3 +3,4 @@ mysql-data/*
 build/
 dist/
 koopa.egg-info/
+__pycache__/
