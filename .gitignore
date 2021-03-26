@@ -1,2 +1,5 @@
 *.pyc
 mysql-data/*
+build/
+dist/
+koopa.egg-info/

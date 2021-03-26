@@ -5,7 +5,7 @@ from typing import List
 
 import polib
 
-from koopa import exceptions as koopa_exceptions
+from l10n import exceptions as koopa_exceptions
 
 
 # TODO(juan) raise exception if there's not at least one app.desc

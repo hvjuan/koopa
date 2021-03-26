@@ -2,8 +2,8 @@
 
 import pytest
 
-from koopa import exceptions as koopa_exceptions
-from koopa import translations
+from l10n import exceptions as koopa_exceptions
+from l10n import translations
 
 
 _BASE_TRANSLATIONS = 'tests/mocked_translations'
