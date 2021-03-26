@@ -1,0 +1,2 @@
+msgid "mockedTestId"
+msgstr "This is the British English mocked translation"
